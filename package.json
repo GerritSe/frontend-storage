@@ -1,9 +1,14 @@
 {
   "author": "Gerrit Seger",
-  "name": "frontend-storage",
-  "version": "0.0.1",
-  "main": "./dist/index.js",
+  "homepage": "https://github.com/GerritSe/frontend-storage",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "name": "frontend-storage",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GerritSe/frontend-storage.git"
+  },
+  "version": "0.0.1",
   "devDependencies": {
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.19.4",
