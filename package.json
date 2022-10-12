@@ -1,0 +1,20 @@
+{
+  "author": "Gerrit Seger",
+  "name": "frontend-storage",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/preset-env": "^7.19.4",
+    "@rollup/plugin-babel": "^6.0.0",
+    "@rollup/plugin-typescript": "^9.0.1",
+    "rollup": "^3.0.1",
+    "tslib": "^2.4.0",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "build": "rollup -c --bundleConfigAsCjs",
+    "prepublishOnly": "rm -rf dist && rollup -c --bundleConfigAsCjs"
+  }
+}
