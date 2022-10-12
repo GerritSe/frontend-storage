@@ -1,13 +1,28 @@
 import { Storage } from "./Storage"
 import { deserialize, serialize } from "./serialization"
 
+interface CookieStorageOptions {
+  secure?: boolean
+}
+
+const DEFAULT_OPTIONS: CookieStorageOptions = {
+  secure: true
+}
+
 export class CookieStorage extends Storage {
+  protected options: CookieStorageOptions
+
   static get isAvailable(): boolean {
     return navigator?.cookieEnabled ?? false
   }
 
+  constructor(storageKey: string, options: CookieStorageOptions = {}) {
+    super(storageKey)
+    this.options = { ...DEFAULT_OPTIONS, ...options }
+  }
+
   protected clearStorage() {
-    document.cookie = `${this.storageKey}=; Expires=${new Date().toUTCString()};`
+    document.cookie = `${this.storageKey}=; Expires=${new Date().toUTCString()}`
   }
 
   protected readStorage() {
@@ -27,12 +42,14 @@ export class CookieStorage extends Storage {
   protected writeStorage() {
     const value = encodeURIComponent(serialize(this.storage))
     const expiryDate = new Date(2200, 0, 1)
-
-    document.cookie = [
+    const cookie = [
       `${this.storageKey}=${value}`,
       "SameSite=Strict",
-      "Secure",
       `Expires=${expiryDate.toUTCString()}`
-    ].join("; ")
+    ]
+
+    if (this.options.secure) cookie.push("secure")
+
+    document.cookie = cookie.join("; ")
   }
 }
