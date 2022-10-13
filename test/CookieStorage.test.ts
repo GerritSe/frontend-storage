@@ -28,16 +28,17 @@ describe("CookieStorage", () => {
       const cookieSpy = jest.spyOn(document, "cookie", "set")
 
       uiStorage.set("darkMode", true)
+      uiStorage.set("nestedOption", { value: true })
 
-      expect(cookieSpy).toHaveBeenCalledTimes(1)
-      expect(cookieSpy).toHaveBeenCalledWith("ui=%7B%22darkMode%22%3Atrue%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT; secure")
+      expect(cookieSpy).toHaveBeenCalledTimes(2)
+      expect(cookieSpy).toHaveBeenCalledWith("ui=%7B%22darkMode%22%3Atrue%2C%22nestedOption%22%3A%7B%22value%22%3Atrue%7D%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT; secure")
 
       optionsStorage.set("preference", "value")
       uiStorage.set("fullscreen", false)
 
-      expect(cookieSpy).toHaveBeenCalledTimes(3)
+      expect(cookieSpy).toHaveBeenCalledTimes(4)
       expect(cookieSpy).toHaveBeenCalledWith("options=%7B%22preference%22%3A%22value%22%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT; secure")
-      expect(cookieSpy).toHaveBeenCalledWith("ui=%7B%22darkMode%22%3Atrue%2C%22fullscreen%22%3Afalse%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT; secure")
+      expect(cookieSpy).toHaveBeenCalledWith("ui=%7B%22darkMode%22%3Atrue%2C%22nestedOption%22%3A%7B%22value%22%3Atrue%7D%2C%22fullscreen%22%3Afalse%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT; secure")
     })
 
     describe("insecure cookies", () => {
@@ -55,12 +56,14 @@ describe("CookieStorage", () => {
 
   describe("#get", () => {
     it("returns the value", () => {
-      jest.spyOn(document, "cookie", "get").mockReturnValue("ui=%7B%22darkMode%22%3Afalse%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT;")
+      jest.spyOn(document, "cookie", "get").mockReturnValue("ui=%7B%22darkMode%22%3Atrue%2C%22nestedOption%22%3A%7B%22value%22%3Atrue%7D%2C%22fullscreen%22%3Afalse%7D; SameSite=Strict; Expires=Tue, 31 Dec 2199 23:00:00 GMT;")
 
       const uiStorage = new CookieStorage("ui")
       const optionsStorage = new CookieStorage("options")
 
-      expect(uiStorage.get("darkMode")).toBe(false)
+      expect(uiStorage.get("darkMode")).toBe(true)
+      expect(uiStorage.get("nestedOption")).toEqual({ value: true })
+      expect(uiStorage.get("fullscreen")).toBe(false)
       expect(optionsStorage.get("darkMode")).not.toBeDefined()
     })
   })
