@@ -14,7 +14,7 @@ import { CookieStorage, LocalStorage, MemoryStorage, SessionStorage, Storage } f
 // Example factory. Adapt depending on what kind of storage you need.
 const storageFactory = (storageKey: string): Storage => {
   if (LocalStorage.isAvailable) return new LocalStorage(storageKey)
-  if (CookieStorage.isAvailable) return new CookieStorage(storageKey)
+  if (CookieStorage.isAvailable) return new CookieStorage(storageKey, { secure: process.env.NODE_ENV === "production" })
 
   // Permanent storage not available, fall back to session storage
   if (SessionStorage.isAvailable) return new SessionStorage(storageKey)
