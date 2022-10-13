@@ -6,7 +6,7 @@ export class MemoryStorage extends Storage {
   }
 
   protected clearStorage() { }
-  protected readStorage() { return {} }
+  protected readStorage() { return this.storage ?? {} }
   protected writeStorage() { }
 }
 
