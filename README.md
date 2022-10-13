@@ -37,6 +37,6 @@ storage.remove("darkMode")
 // Clears all values.
 storage.clear()
 
-// Read again.
+// Reread data from respective storage.
 storage.refresh()
 ```
