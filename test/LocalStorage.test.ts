@@ -1,6 +1,11 @@
 import { LocalStorage } from "../src/LocalStorage"
 
 describe("LocalStorage", () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    localStorage.clear()
+  })
+
   describe(".isAvailable", () => {
     it("returns true", () => {
       expect(LocalStorage.isAvailable).toBe(true)
