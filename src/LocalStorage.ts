@@ -24,8 +24,7 @@ export class LocalStorage extends Storage {
   }
 
   protected readStorage() {
-    const marshalledStorage = localStorage.getItem(this.storageKey)
-    return deserialize(marshalledStorage)
+    return deserialize(localStorage.getItem(this.storageKey))
   }
 
   protected writeStorage() {

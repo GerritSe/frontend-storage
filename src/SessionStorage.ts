@@ -24,8 +24,7 @@ export class SessionStorage extends Storage {
   }
 
   protected readStorage() {
-    const marshalledStorage = sessionStorage.getItem(this.storageKey)
-    return deserialize(marshalledStorage)
+    return deserialize(sessionStorage.getItem(this.storageKey))
   }
 
   protected writeStorage() {
