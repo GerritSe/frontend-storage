@@ -2,10 +2,12 @@ import { Storage } from "./Storage"
 import { deserialize, serialize } from "./serialization"
 
 interface CookieStorageOptions {
-  secure?: boolean
+  sameSite: "lax" | "strict" | "none"
+  secure: boolean
 }
 
 const DEFAULT_OPTIONS: CookieStorageOptions = {
+  sameSite: "strict",
   secure: true
 }
 
@@ -19,7 +21,7 @@ export class CookieStorage extends Storage {
     return window.navigator.cookieEnabled
   }
 
-  constructor(storageKey: string, options: CookieStorageOptions = {}) {
+  constructor(storageKey: string, options: Partial<CookieStorageOptions> = {}) {
     super(storageKey)
     this.options = { ...DEFAULT_OPTIONS, ...options }
   }
@@ -47,7 +49,7 @@ export class CookieStorage extends Storage {
     const expiryDate = new Date(2200, 0, 1)
     const cookie = [
       `${this.storageKey}=${value}`,
-      "SameSite=Strict",
+      `SameSite=${this.options.sameSite}`,
       `Expires=${expiryDate.toUTCString()}`
     ]
 
