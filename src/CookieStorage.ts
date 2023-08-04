@@ -13,7 +13,10 @@ export class CookieStorage extends Storage {
   protected options: CookieStorageOptions
 
   static get isAvailable(): boolean {
-    return navigator?.cookieEnabled ?? false
+    if (typeof window === 'undefined') return false
+    if (window.navigator == null) return false
+
+    return window.navigator.cookieEnabled
   }
 
   constructor(storageKey: string, options: CookieStorageOptions = {}) {
@@ -22,11 +25,11 @@ export class CookieStorage extends Storage {
   }
 
   protected clearStorage() {
-    document.cookie = `${this.storageKey}=; Expires=${new Date().toUTCString()}`
+    window.document.cookie = `${this.storageKey}=; Expires=${new Date().toUTCString()}`
   }
 
   protected readStorage() {
-    const cookies = document.cookie.split(/;\s?/).reduce((result, cookie) => {
+    const cookies = window.document.cookie.split(/;\s?/).reduce((result, cookie) => {
       const separatorIndex = cookie.search("=")
       const key = cookie.slice(0, separatorIndex)
       const value = cookie.slice(separatorIndex + 1)

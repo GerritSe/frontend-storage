@@ -1,21 +1,32 @@
 import { CookieStorage } from "../src/CookieStorage"
 
 describe("CookieStorage", () => {
+  beforeEach(() => {
+    jest.resetAllMocks()
+  })
+
   describe(".isAvailable", () => {
     it("returns true", () => {
       expect(CookieStorage.isAvailable).toBe(true)
     })
 
+    describe("in a server side context", () => {
+      it("returns false", () => {
+        jest.spyOn(global, "window", "get").mockReturnValue(undefined as any as Window & typeof globalThis)
+        expect(CookieStorage.isAvailable).toBe(false)
+      })
+    })
+
     describe("with cookies deactivated", () => {
       it("returns false", () => {
-        Object.defineProperty(navigator, "cookieEnabled", { value: false })
+        jest.spyOn(navigator, "cookieEnabled", "get").mockReturnValue(false)
         expect(CookieStorage.isAvailable).toBe(false)
       })
     })
 
     describe("with no navigator", () => {
       it("returns false", () => {
-        Object.defineProperty(global, "navigator", { value: null })
+        jest.spyOn(window, "navigator", "get").mockReturnValue(undefined as any as Navigator)
         expect(CookieStorage.isAvailable).toBe(false)
       })
     })
